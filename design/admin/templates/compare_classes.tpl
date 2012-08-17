@@ -48,6 +48,7 @@
 
 </form>
 
+{if eq( $compare, false() )}
 <form method="post" action="{'/content_class_diff/view'|ezurl( 'no' )}">
 
 	<div class="context-block">
@@ -64,6 +65,7 @@
 	</div>
 
 </form>
+{/if}
 
 {if and( $compare, eq( $error, false() ) )}
 <div class="context-block">
@@ -165,4 +167,12 @@
 
 	</div></div></div>
 </div>
+
+<form method="post" action="{'/content_class_diff/view'|ezurl( 'no' )}">
+	<div class="controlbar">
+		<div class="box-bc"><div class="box-ml"><div class="block">
+			<input class="button" type="submit" value="{'Compare again'|i18n( 'extension/nxc_content_class_diff' )}" name="CopmareButton" />
+		</div></div></div>
+	</div>
+</form>
 {/if}
