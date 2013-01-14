@@ -13,6 +13,8 @@ $isSourceUpdated = false;
 $http = eZHTTPTool::instance();
 if( $module->isCurrentAction( 'UpdateSource' ) ) {
 	$url = $http->postVariable( 'url' );
+	// Extracting htaccess login and password
+	preg_match( '|//(.*):(.*)@|', $url, $auth );
 
 	$data = array(
 		'Login'       => $http->postVariable( 'login' ),
@@ -40,6 +42,9 @@ if( $module->isCurrentAction( 'UpdateSource' ) ) {
 	curl_setopt( $curl, CURLOPT_POSTFIELDS, $params );
 	curl_setopt( $curl, CURLOPT_URL, $url );
 	curl_setopt( $curl, CURLOPT_POST, true );
+	if( count( $auth ) > 0 ) {
+		curl_setopt( $curl, CURLOPT_USERPWD, $auth[1] . ':' . $auth[2] );
+	}
 
 	$response   = curl_exec( $curl );
 	$headerSize = curl_getinfo( $curl, CURLINFO_HEADER_SIZE );
