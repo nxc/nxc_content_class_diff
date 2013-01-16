@@ -1,0 +1,44 @@
+.compare-forms {
+	margin-top: 10px;
+}
+.compare-column-wrapper {
+	margin-top: 10px;
+	overflow: hidden;
+}
+.compare-forms label {
+	margin-bottom: 5px;
+}
+.compare-forms input {
+	padding: 0 5px;
+}
+.compare-column:first-child {
+	margin-right: 20px;
+}
+.compare-column {
+	float: left;
+}
+.compare-column>ul {
+	margin: 0;
+}
+.compare-column>select {
+	height: 180px;
+}
+
+.compare-results {
+	margin-top: 20px;
+}
+.compare-results table.list {
+	margin-bottom: 15px;
+}
+.compare-results table.list label {
+	font-weight: bold;
+}
+.compare-results table.list td,
+.compare-results table.list th {
+	padding-left: .6em;
+}
+.compare-results table.list td.attribute-name {
+	font-weight: bold;
+	line-height: 1.5em;
+	background-color: #CFCFCF;
+}

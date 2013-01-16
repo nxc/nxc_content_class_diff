@@ -40,7 +40,7 @@ class nxcContentClassDiffHelper
 		return false;
 	}
 
-	public static function parseClassesDefinition( DOMDocument $dom ) {
+	public static function parseClassesDefinition( DOMDocument $dom, array $options = null ) {
 		$classes = array();
 
 		$classNodes = $dom->getElementsByTagName( 'content-class' );
@@ -95,6 +95,22 @@ class nxcContentClassDiffHelper
 					'translatable'          => strtolower( $classAttributeNode->getAttribute( 'translatable' ) ) == 'true',
 					'datatype_parameters'   => $datatypeParameters
 				);
+
+				if(
+					is_array( $options )
+					&& count( $options ) > 0
+				) {
+					foreach( $attribute as $key => $value ) {
+						if( $key == 'identifier' ) {
+							continue;
+						}
+
+						if( isset( $options[ $key ] ) === false ) {
+							unset( $attribute[ $key ]);
+						}
+					}
+				}
+
 				$class['attributes'][ $attribute['identifier'] ] = $attribute;
 			}
 

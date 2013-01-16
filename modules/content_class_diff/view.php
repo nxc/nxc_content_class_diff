@@ -9,6 +9,7 @@ $module  = $Params['Module'];
 $error   = false;
 $compare = false;
 $isSourceUpdated = false;
+$compareOptions  = array();
 
 $http = eZHTTPTool::instance();
 if( $module->isCurrentAction( 'UpdateSource' ) ) {
@@ -63,7 +64,8 @@ if( $module->isCurrentAction( 'UpdateSource' ) ) {
 
 	@unlink( $cookie );
 } elseif( $module->isCurrentAction( 'Copmare' ) ) {
-	$compare = true;
+	$compare        = true;
+	$compareOptions = (array) $http->postVariable( 'compare_options' );
 
 	$file = eZClusterFileHandler::instance( 'var/class_diff_source.xml' );
 	$sourceClassesDefinition = $file->fetchContents();
@@ -72,12 +74,21 @@ if( $module->isCurrentAction( 'UpdateSource' ) ) {
 		$sourceDom  = new DOMDocument( '1.0', 'utf-8' );
 		$sourceDom->loadXML( $sourceClassesDefinition );
 
-		//nxcContentClassDiffHelper::parseClassesDefinition( $currentDom );
-		$currentClassesInfo = nxcContentClassDiffHelper::parseClassesDefinition( $currentDom );
-		$sourceClassesInfo  = nxcContentClassDiffHelper::parseClassesDefinition( $sourceDom );
+		$currentClassesInfo = nxcContentClassDiffHelper::parseClassesDefinition( $currentDom, $compareOptions );
+		$sourceClassesInfo  = nxcContentClassDiffHelper::parseClassesDefinition( $sourceDom, $compareOptions );
 
 		$diff = array();
 		foreach( $currentClassesInfo as $identifier => $classInfo ) {
+			if(
+				isset( $compareOptions['class_ids'] )
+				&& in_array( -1, $compareOptions['class_ids'] ) === false
+			) {
+				$class = eZContentClass::fetchByIdentifier( $identifier, false );
+				if( in_array( $class['id'], $compareOptions['class_ids'], false ) === false ) {
+					continue;
+				}
+			}
+
 			if( isset( $sourceClassesInfo[ $identifier ] ) === false ) {
 				$diff[ $identifier ] = $classInfo;
 			} elseif( serialize( $classInfo['attributes'] ) != serialize( $sourceClassesInfo[ $identifier ]['attributes'] ) ) {
@@ -85,6 +96,16 @@ if( $module->isCurrentAction( 'UpdateSource' ) ) {
 			}
 		}
 		foreach( $sourceClassesInfo as $identifier => $classInfo ) {
+			if(
+				isset( $compareOptions['class_ids'] )
+				&& in_array( -1, $compareOptions['class_ids'] ) === false
+			) {
+				$class = eZContentClass::fetchByIdentifier( $identifier, false );
+				if( in_array( $class['id'], $compareOptions['class_ids'], false ) === false ) {
+					continue;
+				}
+			}
+
 			if( isset( $currentClassesInfo[ $identifier ] ) === false ) {
 				$diff[ $identifier ] = $classInfo;
 			} elseif( serialize( $classInfo['attributes'] ) != serialize( $currentClassesInfo[ $identifier ]['attributes'] ) ) {
@@ -97,7 +118,9 @@ if( $module->isCurrentAction( 'UpdateSource' ) ) {
 }
 
 $tpl = eZTemplate::factory();
+$tpl->setVariable( 'classes', eZContentClass::fetchAllClasses( false ) );
 $tpl->setVariable( 'compare', $compare );
+$tpl->setVariable( 'compare_options', $compareOptions );
 $tpl->setVariable( 'error', $error );
 $tpl->setVariable( 'is_source_updated', $isSourceUpdated );
 if( $compare ) {
