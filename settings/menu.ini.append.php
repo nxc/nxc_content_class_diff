@@ -2,5 +2,5 @@
 
 [Leftmenu_setup]
 Links[content_class_diff]=content_class_diff/view
-LinkNames[content_class_diff]=Copmare content classes
+LinkNames[content_class_diff]=Compare content classes
 */ ?>
