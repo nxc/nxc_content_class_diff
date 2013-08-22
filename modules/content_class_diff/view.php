@@ -8,10 +8,15 @@
 $module  = $Params['Module'];
 $error   = false;
 $compare = false;
+$http    = eZHTTPTool::instance();
+
 $isSourceUpdated = false;
 $compareOptions  = array();
 
-$http = eZHTTPTool::instance();
+$currentClassesInfo = array();
+$sourceClassesInfo  = array();
+$diff               = array();
+
 if( $module->isCurrentAction( 'UpdateSource' ) ) {
 	$url = $http->postVariable( 'url' );
 	// Extracting htaccess login and password
@@ -77,7 +82,6 @@ if( $module->isCurrentAction( 'UpdateSource' ) ) {
 		$currentClassesInfo = nxcContentClassDiffHelper::parseClassesDefinition( $currentDom, $compareOptions );
 		$sourceClassesInfo  = nxcContentClassDiffHelper::parseClassesDefinition( $sourceDom, $compareOptions );
 
-		$diff = array();
 		foreach( $currentClassesInfo as $identifier => $classInfo ) {
 			if(
 				isset( $compareOptions['class_ids'] )
