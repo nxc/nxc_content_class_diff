@@ -109,6 +109,9 @@
 	<div class="box-bc compare-results"><div class="box-ml"><div class="box-content">
 
 		{foreach $diff as $identifier => $classInfo}
+        {if false()}
+            {continue}
+        {/if}
 		<table class="list cache" cellspacing="0">
 
 			<tr>
