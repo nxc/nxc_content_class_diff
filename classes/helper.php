@@ -93,6 +93,16 @@ class nxcContentClassDiffHelper
                                 }
                                 asort($tmp);
                                 $value = implode(',', $tmp);
+                            } elseif ($datatypeParameterNode->tagName == 'options') {
+                                $tmp          = array();
+                                $optionValues = $classAttributeNode->getElementsByTagName('option');
+                                foreach ($optionValues as $option) {
+                                    if ($option->hasAttribute('id')) {
+                                        $tmp[] = $option->getAttribute('id') . ':' . $option->getAttribute('name');
+                                    }
+                                }
+                                asort($tmp);
+                                $value = implode(',', $tmp);
                             } else {
                                 $value = trim($datatypeParameterNode->textContent);
                             }
