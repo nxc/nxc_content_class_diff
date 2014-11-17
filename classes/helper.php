@@ -76,6 +76,11 @@ class nxcContentClassDiffHelper
                 $datatypeParameters     = array();
                 $datatypeParameterNodes = $classAttributeNode->getElementsByTagName('datatype-parameters')->item(0)->childNodes;
                 if ($datatypeParameterNodes->length > 0) {
+                    // set default value for default-placement parameter for object relation list datatype
+                    if( $classAttributeNode->getAttribute('datatype') == 'ezobjectrelationlist' ) {
+                        $datatypeParameters['default-placement'] = '';
+                    }
+
                     foreach ($datatypeParameterNodes as $datatypeParameterNode) {
                         if ($datatypeParameterNode instanceof DOMText) {
                             $value = trim($datatypeParameterNode->textContent);
