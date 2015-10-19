@@ -37,6 +37,11 @@
 					<label>{'Passowrd'|i18n( 'extension/nxc_content_class_diff' )}:</label>
 					<input type="text" name="password" value="publish" />
 				</div>
+
+                                <div class="context-attributes compare-column">
+                                        <label>{'Siteaccess'|i18n( 'extension/nxc_content_class_diff' )}:</label>
+                                        <input type="text" name="siteaccess" value="" />
+                                </div>
 			</div>
 
 

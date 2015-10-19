@@ -21,10 +21,11 @@ if ($module->isCurrentAction('UpdateSource')) {
     // Extracting htaccess login and password
     preg_match('|//(.*):(.*)@|', $url, $auth);
 
+    $sa     = strlen( $http->postVariable('siteaccess') ) > 0 ? '/' . $http->postVariable('siteaccess') : '';
     $data   = array(
         'Login'       => $http->postVariable('login'),
         'Password'    => $http->postVariable('password'),
-        'RedirectURI' => '/content_class_diff/source',
+        'RedirectURI' => $sa . '/content_class_diff/source',
         'LoginButton' => 1
     );
     $params = null;
